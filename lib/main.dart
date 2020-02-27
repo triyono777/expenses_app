@@ -2,6 +2,8 @@ import 'package:expenses_app/transaction.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() => runApp(MyApp());
 
@@ -29,6 +31,12 @@ class MyHomePage extends StatelessWidget {
       date: DateTime.now(),
     ),
   ];
+
+//  String titleInput;
+//  String amountInput;
+
+  final titleController = TextEditingController();
+  final amountController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,11 +46,46 @@ class MyHomePage extends StatelessWidget {
       body: Column(
         children: <Widget>[
           Container(
-//            width: double.infinity,
+            width: double.infinity,
             child: Card(
               color: Colors.blue,
               elevation: 5,
               child: Text('Chart'),
+            ),
+          ),
+          Card(
+            elevation: 3,
+            child: Container(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  TextField(
+                    decoration: InputDecoration(labelText: 'Title '),
+                    controller: titleController,
+//                    onChanged: (nilai) {
+//                      titleInput = nilai;
+//                    },
+                  ),
+                  TextField(
+                    decoration: InputDecoration(labelText: 'Amount '),
+                    controller: amountController,
+//                    onChanged: (nilai) => amountInput = nilai,
+                  ),
+                  FlatButton(
+                    textColor: Colors.purple,
+                    child: Text(
+                      'add Transaktion',
+                    ),
+                    onPressed: () {
+                      print(titleController.text);
+                      print(amountController.text);
+//                      print(titleInput);
+//                      print(amountInput);
+                    },
+                  )
+                ],
+              ),
             ),
           ),
           Column(
@@ -78,7 +121,7 @@ class MyHomePage extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            tx.date.toString(),
+                            DateFormat.yMMMMd().format(tx.date),
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.grey,
