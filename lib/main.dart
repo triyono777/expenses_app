@@ -1,3 +1,5 @@
+import 'package:expenses_app/widgets/charts.dart';
+
 import './widgets/new_transaction.dart';
 
 import './widgets/transaction_list.dart';
@@ -13,6 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
           primarySwatch: Colors.purple,
           accentColor: Colors.amber,
@@ -44,18 +47,18 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _userTransaction = [
-    Transaction(
-      id: 't3',
-      title: 'Shoes',
-      amount: 69.99,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: 't2',
-      title: 'Roti',
-      amount: 29.99,
-      date: DateTime.now(),
-    ),
+//    Transaction(
+//      id: 't3',
+//      title: 'Shoes',
+//      amount: 69.99,
+//      date: DateTime.now(),
+//    ),
+//    Transaction(
+//      id: 't2',
+//      title: 'Roti',
+//      amount: 29.99,
+//      date: DateTime.now(),
+//    ),
   ];
 
   void _addNewTransaction(String txTitle, double txAmount) {
@@ -107,14 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Container(
-              width: double.infinity,
-              child: Card(
-                color: Colors.blue,
-                elevation: 5,
-                child: Text('Chart'),
-              ),
-            ),
+//            Chart(),
             TransactionList(
               transaction: _userTransaction,
             )
