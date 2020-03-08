@@ -11,14 +11,17 @@ class TransactionList extends StatelessWidget {
     return Container(
       height: 300,
       child: transaction.isEmpty
-          ? Column(
-              children: <Widget>[
-                Text('Belum ada transaksi'),
-                Icon(
-                  Icons.remove_shopping_cart,
-                  size: 30,
-                )
-              ],
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text('Belum ada transaksi'),
+                  Icon(
+                    Icons.remove_shopping_cart,
+                    size: 30,
+                  )
+                ],
+              ),
             )
           : ListView.builder(
               itemCount: transaction.length,

@@ -1,4 +1,5 @@
 import 'package:expenses_app/models/transaction.dart';
+import 'package:expenses_app/widgets/chart_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -11,7 +12,7 @@ class Chart extends StatelessWidget {
       final weekDay = DateTime.now().subtract(
         Duration(days: index),
       );
-      var totalSum;
+      var totalSum = 0.0;
       for (var i = 0; i < recentTransaction.length; i++) {
         if (recentTransaction[i].date.day == weekDay.day &&
             recentTransaction[i].date.month == weekDay.month &&
@@ -20,20 +21,37 @@ class Chart extends StatelessWidget {
         }
       }
 
-      print(DateFormat.E(weekDay));
+      print(DateFormat.E().format(weekDay));
       print(totalSum);
 
-      return {'day': DateFormat.E(weekDay), 'amount': totalSum};
+      return {
+        'day': DateFormat.E().format(weekDay).substring(0, 1),
+        'amount': totalSum
+      };
+    });
+  }
+
+  double get totalSpending {
+    return groupTransactionValue.fold(0.0, (sum, item) {
+      return sum + item['amount'];
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    print(groupTransactionValue);
     return Card(
       elevation: 6,
       margin: EdgeInsets.all(20),
       child: Row(
-        children: <Widget>[],
+        children: groupTransactionValue.map((data) {
+          return ChartBar(
+              data['day'],
+              data['amount'],
+              totalSpending == 0.0
+                  ? 0.0
+                  : (data['amount'] as double) / totalSpending);
+        }).toList(),
       ),
     );
   }

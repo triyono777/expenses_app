@@ -61,6 +61,16 @@ class _MyHomePageState extends State<MyHomePage> {
 //    ),
   ];
 
+  List<Transaction> get _recentTransaction {
+    return _userTransaction.where((tx) {
+      return tx.date.isAfter(
+        DateTime.now().subtract(
+          Duration(days: 7),
+        ),
+      );
+    }).toList();
+  }
+
   void _addNewTransaction(String txTitle, double txAmount) {
     final newTx = Transaction(
       title: txTitle,
@@ -110,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-//            Chart(),
+            Chart(_recentTransaction),
             TransactionList(
               transaction: _userTransaction,
             )
