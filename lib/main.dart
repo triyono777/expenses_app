@@ -1,4 +1,5 @@
 import 'package:expenses_app/widgets/charts.dart';
+import 'package:flutter/services.dart';
 
 import './widgets/new_transaction.dart';
 
@@ -9,7 +10,13 @@ import 'package:flutter/widgets.dart';
 
 import 'models/transaction.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
