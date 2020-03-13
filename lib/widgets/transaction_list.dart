@@ -12,17 +12,24 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return transaction.isEmpty
-        ? Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text('Belum ada transaksi'),
-                Icon(
-                  Icons.remove_shopping_cart,
-                  size: 30,
-                )
-              ],
-            ),
+        ? LayoutBuilder(
+            builder: (ctx, constrains) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text('Belum ada transaksi'),
+                    Container(
+                      height: constrains.maxHeight * 0.6,
+                      child: Icon(
+                        Icons.remove_shopping_cart,
+                        size: 200,
+                      ),
+                    )
+                  ],
+                ),
+              );
+            },
           )
         : ListView.builder(
             itemCount: transaction.length,

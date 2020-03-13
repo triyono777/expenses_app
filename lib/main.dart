@@ -11,10 +11,10 @@ import 'package:flutter/widgets.dart';
 import 'models/transaction.dart';
 
 void main() {
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
+//  SystemChrome.setPreferredOrientations([
+//    DeviceOrientation.portraitUp,
+//    DeviceOrientation.portraitDown,
+//  ]);
   runApp(MyApp());
 }
 
@@ -56,21 +56,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction> _userTransaction = [
-//    Transaction(
-//      id: 't3',
-//      title: 'Shoes',
-//      amount: 69.99,
-//      date: DateTime.now(),
-//    ),
-//    Transaction(
-//      id: 't2',
-//      title: 'Roti',
-//      amount: 29.99,
-//      date: DateTime.now(),
-//    ),
-  ];
+  final List<Transaction> _userTransaction = [];
 
+  bool _showChart = false;
   List<Transaction> get _recentTransaction {
     return _userTransaction.where((tx) {
       return tx.date.isAfter(
@@ -138,22 +126,36 @@ class _MyHomePageState extends State<MyHomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Container(
-                height: (MediaQuery.of(context).size.height -
-                        appBar.preferredSize.height -
-                        MediaQuery.of(context).padding.top) *
-                    0.3,
-                child: Chart(_recentTransaction)),
-            Container(
-              height: (MediaQuery.of(context).size.height -
-                      appBar.preferredSize.height -
-                      MediaQuery.of(context).padding.top) *
-                  0.7,
-              child: TransactionList(
-                transaction: _userTransaction,
-                deleteTx: _deleteTransaction,
-              ),
-            )
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text('Show Chart'),
+                Switch(
+                    value: _showChart,
+                    onChanged: (val) {
+                      setState(() {
+                        _showChart = val;
+                      });
+                    })
+              ],
+            ),
+            _showChart
+                ? Container(
+                    height: (MediaQuery.of(context).size.height -
+                            appBar.preferredSize.height -
+                            MediaQuery.of(context).padding.top) *
+                        0.7,
+                    child: Chart(_recentTransaction))
+                : Container(
+                    height: (MediaQuery.of(context).size.height -
+                            appBar.preferredSize.height -
+                            MediaQuery.of(context).padding.top) *
+                        0.7,
+                    child: TransactionList(
+                      transaction: _userTransaction,
+                      deleteTx: _deleteTransaction,
+                    ),
+                  )
           ],
         ),
       ),
