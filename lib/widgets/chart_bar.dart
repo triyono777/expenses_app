@@ -8,6 +8,7 @@ class ChartBar extends StatelessWidget {
   ChartBar(this.label, this.spendidngAmount, this.spendPctOfTotal);
   @override
   Widget build(BuildContext context) {
+    print('build() CahrtBar');
     return LayoutBuilder(
       builder: (ctx, constrains) {
         return Column(

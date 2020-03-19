@@ -107,6 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    print('build() MyHomePagestate');
     final mediaquery = MediaQuery.of(context);
     final isLandskape = mediaquery.orientation == Orientation.landscape;
     final PreferredSizeWidget appBar = Platform.isIOS
@@ -144,59 +145,84 @@ class _MyHomePageState extends State<MyHomePage> {
         deleteTx: _deleteTransaction,
       ),
     );
-    final pageBody = SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          if (isLandskape)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text('Show Chart'),
-                Switch.adaptive(
-                    value: _showChart,
-                    onChanged: (val) {
-                      setState(() {
-                        _showChart = val;
-                      });
-                    })
-              ],
-            ),
-          if (!isLandskape)
-            Container(
-                height: (mediaquery.size.height -
-                        appBar.preferredSize.height -
-                        mediaquery.padding.top) *
-                    0.3,
-                child: Chart(_recentTransaction)),
-          if (!isLandskape) txListWidget,
-          if (isLandskape)
-            _showChart
-                ? Container(
-                    height: (mediaquery.size.height -
-                            appBar.preferredSize.height -
-                            mediaquery.padding.top) *
-                        0.7,
-                    child: Chart(_recentTransaction))
-                : txListWidget
-        ],
+    final pageBody = SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            if (isLandskape) ...buildLandscap(mediaquery, appBar, txListWidget),
+            if (!isLandskape) ...buildPotrait(mediaquery, appBar, txListWidget),
+          ],
+        ),
       ),
     );
     return Platform.isIOS
-        ? CupertinoPageScaffold(
-            child: pageBody,
-            navigationBar: appBar,
-          )
-        : Scaffold(
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerFloat,
-            floatingActionButton: Platform.isIOS
-                ? Container()
-                : FloatingActionButton(
-                    onPressed: () => startAddnewTransaction(context),
-                    child: Icon(Icons.add),
-                  ),
-            appBar: appBar,
-            body: pageBody,
-          );
+        ? buildCupertinoPageScaffold(pageBody, appBar)
+        : buildScaffold(context, appBar, pageBody);
+  }
+
+  Scaffold buildScaffold(
+      BuildContext context, PreferredSizeWidget appBar, SafeArea pageBody) {
+    return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Platform.isIOS
+          ? Container()
+          : FloatingActionButton(
+              onPressed: () => startAddnewTransaction(context),
+              child: Icon(Icons.add),
+            ),
+      appBar: appBar,
+      body: pageBody,
+    );
+  }
+
+  CupertinoPageScaffold buildCupertinoPageScaffold(
+      SafeArea pageBody, PreferredSizeWidget appBar) {
+    return CupertinoPageScaffold(
+      child: pageBody,
+      navigationBar: appBar,
+    );
+  }
+
+  List<Widget> buildPotrait(MediaQueryData mediaquery,
+      PreferredSizeWidget appBar, Widget txListWidget) {
+    return [
+      Container(
+          height: (mediaquery.size.height -
+                  appBar.preferredSize.height -
+                  mediaquery.padding.top) *
+              0.3,
+          child: Chart(_recentTransaction)),
+      txListWidget
+    ];
+  }
+
+  List<Widget> buildLandscap(MediaQueryData mediaquery,
+      PreferredSizeWidget appBar, Widget txListWidget) {
+    return [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            'Show Chart',
+            style: Theme.of(context).textTheme.title,
+          ),
+          Switch.adaptive(
+              value: _showChart,
+              onChanged: (val) {
+                setState(() {
+                  _showChart = val;
+                });
+              })
+        ],
+      ),
+      _showChart
+          ? Container(
+              height: (mediaquery.size.height -
+                      appBar.preferredSize.height -
+                      mediaquery.padding.top) *
+                  0.7,
+              child: Chart(_recentTransaction))
+          : txListWidget
+    ];
   }
 }
