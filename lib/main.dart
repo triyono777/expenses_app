@@ -162,6 +162,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Scaffold buildScaffold(
       BuildContext context, PreferredSizeWidget appBar, SafeArea pageBody) {
+    print('Build scaffold');
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Platform.isIOS
